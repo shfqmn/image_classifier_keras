@@ -4,7 +4,7 @@
  `https://www.kaggle.com/c/cifar-10/discussion/40237#latest-588909`
  
 ## Installation
-install the prerequist:
+install the prerequisite:
 `pip install keras numpy Pillow flask`
 
 ## Training
