@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport">
+  <title>Image Prediction</title>
+    <content="width=device-width, initial-scale=1, user-scalable=yes">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+  .btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  background: red;
+  cursor: inherit;
+  display: block;
+}
+input[readonly] {
+  background-color: white !important;
+  cursor: text !important;
+}
+  </style>
+</head>
+<body>
+ 
+<div class="container" style="margin-top: 20px;">
+    <div class="row">
+       
+        <div>
+			<h2>Image Classification</h2>
+            <h4>Image Classification using Convolutional Neural Network (CNN) trained on CIFAR-10. Can classify 10 classes which are airplanes, cars, birds, cats, deer, dogs, frogs, horses, ships, and trucks. </h4>
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <span class="btn btn-primary btn-file">
+                        Browse&hellip; <input type="file" id="filebutton" single>
+                    </span>
+                </span>
+                <input type="text" class="form-control" readonly>
+            </div>
+        </div>
+    </div>
+	
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-7"><img id="image" style="width=600px;height:300px"></div>
+		<div class="col-md-4"></div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-7"><h3 id="result"><h3></div>
+		<div class="col-md-4"></div>
+	</div>
+</div>
+ 
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+ <script>
+ $(document).on('change', '.btn-file :file', function() {
+  var input = $(this),
+      numFiles = input.get(0).files ? input.get(0).files.length : 1,
+      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+  input.trigger('fileselect', [numFiles, label]);
+  fr.readAsDataURL($("#filebutton").prop("files")[0])
+});
+
+$(document).ready( function() {
+    $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+        
+        var input = $(this).parents('.input-group').find(':text'),
+            log = numFiles > 1 ? numFiles + ' files selected' : label;
+        
+        if( input.length ) {
+            input.val(log);
+        } else {
+            if( log ) alert(log);
+        }
+        
+    });
+	
+	fr = new FileReader()
+	fr.onloadend = function() {
+    var img = fr.result;
+    $('#image').attr('src',img);
+	$.ajax({
+		type: 'POST',
+		url: '/predict',
+		data: { 
+			'image': img
+			},
+		success: function(msg){
+			$("#result").text("The image is a/an "+msg)
+		}
+	});
+}
+});
+ </script>
+</body>
+</html>
