@@ -83,4 +83,6 @@ def run(data):
     with graph.as_default():
         with session.as_default():
             result = model.predict(np_image) #predict image 
-    return classes[(result>0.5)[0]][0] # to change from categorical to string value
+            result = result[0] #remove array
+            
+    return classes[np.where(result == result.max())][0] # to change from categorical to string value
