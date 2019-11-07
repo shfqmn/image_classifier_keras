@@ -2,12 +2,12 @@
  Classify images using CNN trained on CIFAR-10 dataset
  CNN model adopted from `https://www.kaggle.com/c/cifar-10/discussion/40237#latest-588909`
  
-# Installation
+## Installation
 install the prerequist:
 `pip install keras numpy Pillow flask`
 
-#Training
+## Training
 `python train.py`
 
-#Running Server
+## Running Server
 `python server.py`
